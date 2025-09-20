@@ -108,6 +108,10 @@ vim.opt.relativenumber = true
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.o.mouse = 'a'
 
+vim.o.tabstop = 4 -- Number of spaces a tab character displays as
+vim.o.shiftwidth = 4 -- Number of spaces used for auto-indentation
+vim.o.softtabstop = 4 -- Number of spaces a tab counts for while editing
+
 -- Don't show the mode, since it's already in the status line
 vim.o.showmode = false
 
@@ -165,7 +169,7 @@ vim.o.scrolloff = 10
 -- if performing an operation that would fail due to unsaved changes in the buffer (like `:q`),
 -- instead raise a dialog asking if you wish to save the current file(s)
 -- See `:help 'confirm'`
-vim.o.confirm = true
+vim.o.confirm = false
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
@@ -925,12 +929,10 @@ require('lazy').setup({
     opts = {
       notify_on_error = false,
       format_on_save = function(bufnr)
-        local disable_filetypes = { cpp = true }
-        local lsp_format_opt
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
         -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { c = true, cpp = true }
+        local disable_filetypes = {}
         if disable_filetypes[vim.bo[bufnr].filetype] then
           return nil
         else
@@ -1133,26 +1135,6 @@ require('lazy').setup({
       },
       'folke/lazydev.nvim',
     },
-    config = function()
-      -- See `:help cmp`
-      local cmp = require 'cmp'
-      local luasnip = require 'luasnip'
-      luasnip.config.setup {}
-
-      cmp.setup {
-        snippet = {
-          expand = function(args)
-            luasnip.lsp_expand(args.body)
-          end,
-        },
-        window = {
-          completion = cmp.config.window.bordered(),
-          documentation = cmp.config.window.bordered(),
-        },
-        completion = { completeopt = 'menu,menuone,noinsert' },
-
-        -- For an understanding of why these mappings were
-        -- chosen, you will need to read `:help ins-completion`
     --- @module 'blink.cmp'
     --- @type blink.cmp.Config
     opts = {
@@ -1190,45 +1172,21 @@ require('lazy').setup({
         nerd_font_variant = 'mono',
       },
 
-          -- If you prefer more traditional completion keymaps,
-          -- you can uncomment the following lines
-          ['<CR>'] = cmp.mapping.confirm { select = true },
-          ['<Tab>'] = cmp.mapping.select_next_item(),
-          ['<S-Tab>'] = cmp.mapping.select_prev_item(),
       completion = {
         -- By default, you may press `<c-space>` to show the documentation.
         -- Optionally, set `auto_show = true` to show the documentation after a delay.
         documentation = { auto_show = false, auto_show_delay_ms = 500 },
+        menu = {
+          scrollbar = false,
+        },
       },
-    },
 
       sources = {
         default = { 'lsp', 'path', 'snippets', 'lazydev' },
         providers = {
           lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
         },
-        sources = {
-            name = 'lazydev',
-            -- set group index to 0 to skip loading LuaLS completions as lazydev recommends it
-            group_index = 0,
-          },
-          { name = 'nvim_lsp' },
-          { name = 'luasnip' },
-          { name = 'path' },
-          { name = 'nvim_lsp_signature_help' },
-        },
-        sorting = {
-          comparators = {
-            cmp.config.compare.offset,
-            cmp.config.compare.exact,
-            cmp.config.compare.recently_used,
-            require 'clangd_extensions.cmp_scores',
-            cmp.config.compare.kind,
-            cmp.config.compare.sort_text,
-            cmp.config.compare.length,
-            cmp.config.compare.order,
-          },
-        },
+      },
 
       snippets = { preset = 'luasnip' },
 
@@ -1243,8 +1201,8 @@ require('lazy').setup({
 
       -- Shows a signature help window while you type arguments for a function
       signature = { enabled = true },
-      },
     },
+  },
 
   { -- You can easily change to a different colorscheme.
     -- Change the name of the colorscheme plugin below, and then
@@ -1266,6 +1224,32 @@ require('lazy').setup({
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
       vim.cmd.colorscheme 'kanagawa'
+
+      -- Customize blink.cmp colors
+      vim.api.nvim_create_autocmd('ColorScheme', {
+        group = vim.api.nvim_create_augroup('blink_cmp_colors', { clear = true }),
+        callback = function()
+          -- Completion menu colors
+          vim.api.nvim_set_hl(0, 'BlinkCmpMenu', { bg = '#2A2A37', fg = '#C8C093' })
+          vim.api.nvim_set_hl(0, 'BlinkCmpMenuBorder', { bg = '#2A2A37', fg = '#54546D' })
+          vim.api.nvim_set_hl(0, 'BlinkCmpMenuSelection', { bg = '#49443C', fg = '#DCD7BA' })
+
+          -- Completion item kinds (icons)
+          vim.api.nvim_set_hl(0, 'BlinkCmpKindText', { fg = '#C8C093' })
+          vim.api.nvim_set_hl(0, 'BlinkCmpKindMethod', { fg = '#7FB4CA' })
+          vim.api.nvim_set_hl(0, 'BlinkCmpKindFunction', { fg = '#7FB4CA' })
+          vim.api.nvim_set_hl(0, 'BlinkCmpKindKeyword', { fg = '#957FB8' })
+          vim.api.nvim_set_hl(0, 'BlinkCmpKindVariable', { fg = '#E6C384' })
+          vim.api.nvim_set_hl(0, 'BlinkCmpKindSnippet', { fg = '#98BB6C' })
+
+          -- Documentation window
+          vim.api.nvim_set_hl(0, 'BlinkCmpDoc', { bg = '#1F1F28', fg = '#DCD7BA' })
+          vim.api.nvim_set_hl(0, 'BlinkCmpDocBorder', { bg = '#1F1F28', fg = '#54546D' })
+        end,
+      })
+
+      -- Trigger the autocmd for the current colorscheme
+      vim.cmd 'doautocmd ColorScheme'
     end,
   },
 
