@@ -102,11 +102,8 @@ vim.g.have_nerd_font = true
 vim.o.number = true
 -- You can also add relative line numbers, to help with jumping.
 --  Experiment for yourself to see if you like it!
-<<<<<<< HEAD
 vim.opt.relativenumber = true
-=======
 -- vim.o.relativenumber = true
->>>>>>> 3338d3920620861f8313a2745fd5d2be39f39534
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.o.mouse = 'a'
@@ -928,15 +925,12 @@ require('lazy').setup({
     opts = {
       notify_on_error = false,
       format_on_save = function(bufnr)
-<<<<<<< HEAD
         local disable_filetypes = { cpp = true }
         local lsp_format_opt
-=======
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
         -- languages here or re-enable it for the disabled ones.
         local disable_filetypes = { c = true, cpp = true }
->>>>>>> 3338d3920620861f8313a2745fd5d2be39f39534
         if disable_filetypes[vim.bo[bufnr].filetype] then
           return nil
         else
@@ -1139,7 +1133,6 @@ require('lazy').setup({
       },
       'folke/lazydev.nvim',
     },
-<<<<<<< HEAD
     config = function()
       -- See `:help cmp`
       local cmp = require 'cmp'
@@ -1160,7 +1153,6 @@ require('lazy').setup({
 
         -- For an understanding of why these mappings were
         -- chosen, you will need to read `:help ins-completion`
-=======
     --- @module 'blink.cmp'
     --- @type blink.cmp.Config
     opts = {
@@ -1175,7 +1167,6 @@ require('lazy').setup({
         --
         -- For an understanding of why the 'default' preset is recommended,
         -- you will need to read `:help ins-completion`
->>>>>>> 3338d3920620861f8313a2745fd5d2be39f39534
         --
         -- No, but seriously. Please read `:help ins-completion`, it is really good!
         --
@@ -1199,26 +1190,23 @@ require('lazy').setup({
         nerd_font_variant = 'mono',
       },
 
-<<<<<<< HEAD
           -- If you prefer more traditional completion keymaps,
           -- you can uncomment the following lines
           ['<CR>'] = cmp.mapping.confirm { select = true },
           ['<Tab>'] = cmp.mapping.select_next_item(),
           ['<S-Tab>'] = cmp.mapping.select_prev_item(),
-=======
       completion = {
         -- By default, you may press `<c-space>` to show the documentation.
         -- Optionally, set `auto_show = true` to show the documentation after a delay.
         documentation = { auto_show = false, auto_show_delay_ms = 500 },
       },
->>>>>>> 3338d3920620861f8313a2745fd5d2be39f39534
+    },
 
       sources = {
         default = { 'lsp', 'path', 'snippets', 'lazydev' },
         providers = {
           lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
         },
-<<<<<<< HEAD
         sources = {
           {
             name = 'lazydev',
@@ -1243,9 +1231,7 @@ require('lazy').setup({
           },
         },
       }
-    end,
-=======
-      },
+       end, },
 
       snippets = { preset = 'luasnip' },
 
@@ -1261,8 +1247,12 @@ require('lazy').setup({
       -- Shows a signature help window while you type arguments for a function
       signature = { enabled = true },
     },
->>>>>>> 3338d3920620861f8313a2745fd5d2be39f39534
-  },
+
+    },
+
+
+
+
 
   { -- You can easily change to a different colorscheme.
     -- Change the name of the colorscheme plugin below, and then
