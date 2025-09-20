@@ -1208,7 +1208,6 @@ require('lazy').setup({
           lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
         },
         sources = {
-          {
             name = 'lazydev',
             -- set group index to 0 to skip loading LuaLS completions as lazydev recommends it
             group_index = 0,
@@ -1230,8 +1229,6 @@ require('lazy').setup({
             cmp.config.compare.order,
           },
         },
-      }
-       end, },
 
       snippets = { preset = 'luasnip' },
 
@@ -1246,13 +1243,8 @@ require('lazy').setup({
 
       -- Shows a signature help window while you type arguments for a function
       signature = { enabled = true },
+      },
     },
-
-    },
-
-
-
-
 
   { -- You can easily change to a different colorscheme.
     -- Change the name of the colorscheme plugin below, and then
